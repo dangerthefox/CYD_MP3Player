@@ -26,10 +26,10 @@ jobs:
           arduino-cli lib install "TFT_eSPI" "XPT2046_Touchscreen"
           mkdir -p ~/Arduino/libraries
           git clone https://github.com/schreibfaul1/ESP32-audioI2S.git ~/Arduino/libraries/ESP32-audioI2S
+          git clone https://github.com/embedded-kiddie/CYD_Audio.git ~/Arduino/libraries/CYD_Audio
 
       - name: Copy Shared Files to Sketch Folder
         run: |
-          # Copy any root-level header and source files into the sketch directory
           cp *.h ./CYD_MP3Player_Basic/ 2>/dev/null || true
           cp *.cpp ./CYD_MP3Player_Basic/ 2>/dev/null || true
 
