@@ -1,8 +1,9 @@
-name: Build ESP32 Firmware
+name: Build CYD_MP3Player_Basic
 
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,19 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
 
-      - name: Install PlatformIO Core
-        run: pip install platformio
+      - name: Install ESP32 Board Core
+        run: |
+          arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
-      - name: Build firmware
-        run: pio run
-        
-      - name: Upload binary artifact
+      - name: Install Required Libraries
+        run: |
+          arduino-cli lib install "TFT_eSPI" "XPT2046_Touchscreen" "ESP32-audioI2S"
+
+      - name: Compile CYD_MP3Player_Basic
+        run: |
+          # Points directly to the subfolder containing the .ino sketch
+          arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./build ./CYD_MP3Player_Basic
+
+      - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: firmware-bin
-          path: .pio/build/*/firmware.bin
+          name: CYD_MP3Player_Basic-bin
+          path: build/*.bin
