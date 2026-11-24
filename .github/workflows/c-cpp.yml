@@ -23,11 +23,12 @@ jobs:
 
       - name: Install Required Libraries
         run: |
-          arduino-cli lib install "TFT_eSPI" "XPT2046_Touchscreen" "ESP32-audioI2S"
+          arduino-cli lib install "TFT_eSPI" "XPT2046_Touchscreen"
+          mkdir -p ~/Arduino/libraries
+          git clone https://github.com/schreibfaul1/ESP32-audioI2S.git ~/Arduino/libraries/ESP32-audioI2S
 
       - name: Compile CYD_MP3Player_Basic
         run: |
-          # Points directly to the subfolder containing the .ino sketch
           arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./build ./CYD_MP3Player_Basic
 
       - name: Upload Binary Artifact
